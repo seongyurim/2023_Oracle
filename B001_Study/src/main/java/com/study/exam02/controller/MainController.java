@@ -1,5 +1,7 @@
 package com.study.exam02.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,6 +76,35 @@ public class MainController {
     public String exam04_request_value()
     {
         return "exam04_request_value";
+    }
+
+    @GetMapping("/exam05_response")
+    public String exam05_response()
+    {
+        return "exam05_response";
+    }
+
+    @PostMapping("exam05_response_info")
+    public void exam05_response_info(String userId, String userPw,
+                                       HttpServletRequest request,
+                                       HttpServletResponse response) throws Exception
+    {
+        System.out.println("id : " + userId);
+        System.out.println("pw : " + userPw);
+
+        if ((userId.equals("abc")) && (userPw.equals("1111"))) {
+            // 로그인 성공: 메인 페이지로 이동
+            response.sendRedirect("hello");
+        } else {
+            // 로그인 실패: 로그인 페이지로 이동
+            response.sendRedirect("exam05_response");
+        }
+    }
+
+    @GetMapping("/exam06_out")
+    public String exam06_out()
+    {
+        return "exam06_out";
     }
     
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.board.bbs.BbsDAO">
+<resultMap type="com.study.board.bbs.BbsTblVO" id="bbsMap">
+    <result property="userId"    column="USERID"/>
+    <result property="seq"       column="SEQ"/>
+    <result property="title"     column="TITLE"/>
+    <result property="content"   column="CONTENT"/>
+    <result property="divi"      column="DIVI"/>
+    <result property="regdate"   column="REGDATE"/>
+</resultMap>
+
+<!-- <select id="selectBbsCount" resultMap="integer">
+    SELECT COUNT(*) FROM BBS_TBL
+</select> -->
+
+<select id="selectBbsList" resultMap="bbsMap">
+    SELECT * FROM BBS_TBL
+</select>
+
+</mapper>

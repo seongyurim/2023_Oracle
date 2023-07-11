@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        const product = {
+            name : '마우스',
+            buttons : 6,
+            wireless : false,
+            color : 'pink',
+            getColor : function() {
+                return product.color;
+            },
+            getName : function() {
+                return this.name;
+            },
+            button : {
+                lbutton : 'click',
+                rbutton : 'click,',
+                cbutton : 'scroll'
+            },
+            ar : [1, 2, 3, 4, 5]
+        };
+
+        console.log(product.name);
+        console.log(product['color']);
+        console.log(product.getColor());
+        console.log(product.getName());
+        console.log(product.button.cbutton);
+        console.log(product.ar[2]);
+
+    </script>
+</body>
+</html>

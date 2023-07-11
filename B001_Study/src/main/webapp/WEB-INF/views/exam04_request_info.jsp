@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.Enumeration"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,6 +28,21 @@
             <li>Param1: <%= request.getParameter("eng") %></li>
             <li>Param2: <%= request.getParameter("ko") %></li>
         </ul>
+    </p>
+    <p>
+        <strong>3. Request 헤더정보</strong><br>
+        <%
+        String headerName = ""; // 헤더명
+        String headerValue = "";      // 헤더의 값
+
+        Enumeration headers = request.getHeaderNames();
+        
+        while(headers.hasMoreElements()) {
+            headerName = (String)headers.nextElement();
+            headerValue = request.getHeader(headerName);
+            out.println(headerName + ": " + headerValue + "<br>");
+        }
+        %>
     </p>
 
 </body>
