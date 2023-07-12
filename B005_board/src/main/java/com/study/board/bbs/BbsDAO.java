@@ -16,4 +16,8 @@ public class BbsDAO {
         return sqlSessionTemplate.selectList("selectBbsList", vo);
     }
 
+    public BbsTblVO selectBbsContent(BbsTblVO vo) throws Exception {
+        return sqlSessionTemplate.selectOne("selectBbsContent", vo);
+    }
+
 }

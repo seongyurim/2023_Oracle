@@ -24,7 +24,7 @@
             </tr>
         </thead>
 
-        <tbody id="tbody">
+        <tbody>
 
         </tbody>
     </table>
@@ -84,7 +84,28 @@
                     processData : false,
                     contentType : false,
                     success : function(data) {                        
-                        fillBbs(data);
+                        let bstr = '';
+
+                        // 1. tbody를 가져오고 초기화한다.
+                        // 페이지 변경 시 기존 데이터의 아래에 내용이 추가되는 것이 아니라
+                        // 새로운 데이터를 전개하기 위해서 초기화가 필요하다.
+                        const tBody = document.querySelector('#bbs > tbody');
+                        tBody.innerHTML = '';
+
+                        // 2. tbody를 만들어준다.
+                        for (let i = 0; i < data.bbsList.length; i++) {
+                            bstr = '';
+                            bstr += '<tr>';
+                                bstr += '<td>' + (i+1) + '</td>';
+                                bstr += '<td><a href=/bbs/content?userId=' + data.bbsList[i].userId +
+                                        '&seq=' + data.bbsList[i].seq + '>' + data.bbsList[i].title + '</a></td>';
+                                bstr += '<td>' + data.bbsList[i].userId + '</td>';
+                                bstr += '<td>' + data.bbsList[i].regdate + '</td>';
+                            bstr += '</tr>';
+                            tBody.innerHTML += bstr;
+                        }
+
+                        // <a href="/bbs/content?userId=eomong&seq=1">
                     }
                 });
 
@@ -92,49 +113,50 @@
 
             getBbs(1);
 
-            const fillBbs = function(data) {
+            // // 테이블의 tbody를 채워주는 함수
+            // const fillBbs = function(data) {
 
-                // tbody DOM구조로 가져오기
-                const $tbody = document.getElementById('tbody');
-                // $tbody.empty();
+            //     // 1. tbody를 DOM구조로 가져온다.
+            //     const $tbody = document.querySelector('#bbsTable > tbody');
+            //     // $tbody.empty();
 
-                for (let i = 0; i < data.bbsList.length; i++) {
-                    const bbs = data.bbsList[i];
+            //     for (let i = 0; i < data.bbsList.length; i++) {
+            //         const bbs = data.bbsList[i];
 
-                    // 행(row) 생성
-                    const $row = document.createElement('tr');
+            //         // 행(row) 생성
+            //         const $row = document.createElement('tr');
 
-                    // 각 데이터에 해당하는 셀(td)을 생성하여 내용 설정
-                    const $seq = document.createElement('td');
-                    const $title = document.createElement('td');
-                    const $titleLink = document.createElement('a');
-                    const $userId = document.createElement('td');
-                    const $regdate = document.createElement('td');
+            //         // 각 데이터에 해당하는 셀(td)을 생성하여 내용 설정
+            //         const $seq = document.createElement('td');
+            //         const $title = document.createElement('td');
+            //         const $titleLink = document.createElement('a');
+            //         const $userId = document.createElement('td');
+            //         const $regdate = document.createElement('td');
 
-                    $seq.textContent = bbs.seq;
-                    $userId.textContent = bbs.userId;
-                    $regdate.textContent = bbs.regdate;
+            //         $seq.textContent = bbs.seq;
+            //         $userId.textContent = bbs.userId;
+            //         $regdate.textContent = bbs.regdate;
 
-                    // 타이틀에 링크 적용하기
-                    $titleLink.textContent = bbs.title;
-                    $title.appendChild($titleLink);
-                    $titleLink.href = '#'; // 링크 대상 지정
-                    $titleLink.addEventListener('click', function() {
-                        window.location.href = 'http://www.naver.com';
-                    });
+            //         // 타이틀에 링크 적용하기
+            //         $titleLink.textContent = bbs.title;
+            //         $title.appendChild($titleLink);
+            //         $titleLink.href = '#'; // 링크 대상 지정
+            //         $titleLink.addEventListener('click', function() {
+            //             window.location.href = 'http://www.naver.com';
+            //         });
 
-                    // row를 tbody의 자식으로 추가
-                    // 셀(td)을 row에 추가
-                    $row.appendChild($seq);
-                    $row.appendChild($title);
-                    $row.appendChild($userId);
-                    $row.appendChild($regdate);
+            //         // row를 tbody의 자식으로 추가
+            //         // 셀(td)을 row에 추가
+            //         $row.appendChild($seq);
+            //         $row.appendChild($title);
+            //         $row.appendChild($userId);
+            //         $row.appendChild($regdate);
 
-                    // row를 tbody에 추가
-                    $tbody.appendChild($row);
-                }
+            //         // row를 tbody에 추가
+            //         $tbody.appendChild($row);
+            //     }
 
-            }
+            // }
 
             // 4. 서버에서 전달된 게시판 데이터를 수신한다.
             // 5. 수신된 데이터를 가지고 tbody를 만든다.

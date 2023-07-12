@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,7 +28,21 @@ public class BbsController {
         // 결과를 mstvo에 저장하고, 이것을 클라이언트에게 전송한다.
         mstvo.setBbsList(list);
 
-        return mstvo; // 내가 응답할 패킷의 Body에 응답할 내용을 써서 전달?
-    
+        return mstvo;    
+    }
+
+    @GetMapping("/bbs/content")
+    public String viewContent(@ModelAttribute("BbsTblVO") BbsTblVO vo, Model model) throws Exception
+    {
+        // 1. 함수에 알맞은 파라미터를 넣는다.
+
+        // 2. 쿼리를 DB에 전송하여 결과를 가져온다.
+        // SELECT * FROM BBS_TBL WHERE userid='jsh AND seq='1';
+        BbsTblVO resultVO = bbsDao.selectBbsContent(vo);
+        
+        // 3. 결과를 가지고 JSP를 만들어서 보내준다.
+        model.addAttribute("vo", resultVO);
+
+        return "bbs/content";
     }
 }
