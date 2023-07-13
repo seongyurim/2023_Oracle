@@ -1,34 +1,43 @@
-package com.study.board.common;
+package com.myown.study.common;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.study.board.user.UserDAO;
-import com.study.board.user.UserTblVO;
+import com.myown.study.user.UserDAO;
+import com.myown.study.user.UserTblVO;
 
 @Controller
 public class MainController {
-    // http://localhost/???를 만드는 클래스
 
     @Autowired
     private UserDAO userdao;
 
     @GetMapping("/index")
-    public String index()
-    {
+    public String index() {
         return "index";
     }
-
-    @GetMapping("/login")
-    public String login()
-    {
+    
+    @GetMapping("/index")
+    public String index(@ModelAttribute("UserTblVO") UserTblVO vo, Model model) throws Exception {
         // 세션에 저장되어 있는 사용자 정보를 모델에 얹어주는 기능을 넣어주어야 한다.
+
+        UserTblVO resultVO = userdao.selectOneUser(vo);
+
+        // 결과를 가지고 JSP를 만들어서 보내준다.
+        model.addAttribute("vo", resultVO);
+
+        return "index";
+    }
+    
+    @GetMapping("/login")
+    public String login() {
         return "login";
     }
 
@@ -48,4 +57,9 @@ public class MainController {
             response.sendRedirect("login");
         }        
     }
+
+
+
+
+    
 }

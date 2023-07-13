@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- DAO 정보 -->
+<mapper namespace="com.study.board.user.UserDAO">
+
+<!-- resultMap = 얻어온 결과를 저장할 곳. 즉 VO 정보 -->
+<resultMap type="com.study.board.user.UserTblVO" id="userMap">
+    <result property="userId"    column="USERID"/>
+    <result property="userPw"    column="USERPW"/>
+    <result property="email"     column="EMAIL"/>
+    <result property="name"      column="NAME"/>
+</resultMap>
+
+<select id="selectOneUser" resultMap="userMap">
+    SELECT * FROM USER_TBL
+    WHERE USERID=#{userId} AND USERPW=#{userPw} <!-- 끝에 세미콜론 붙이지 않기! -->
+</select>
+
+</mapper>
