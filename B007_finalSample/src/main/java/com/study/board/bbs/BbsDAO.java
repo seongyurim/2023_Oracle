@@ -32,7 +32,7 @@ public class BbsDAO {
     }
 
     // 게시물 등록하기
-    public BbsTblVO insertBbsContent(BbsTblVO vo) throws Exception {
-        return sqlSessionTemplate.selectOne("insertBbsContent", vo);
+    public int insertBbsContent(BbsTblVO vo) throws Exception {
+        return sqlSessionTemplate.insert("insertBbsContent", vo);
     }
 }

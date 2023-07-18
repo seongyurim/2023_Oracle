@@ -2,6 +2,9 @@ package com.study.board.bbs;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,10 +69,10 @@ public class BbsController {
     @ResponseBody // HTTP의 body(payload)로 응답하겠다는 의미(모델, 뷰를 거치지 않고)
     public String content(@ModelAttribute("BbsTblVO") BbsTblVO vo) throws Exception {
         // vo로 id, seq, title, content를 받았다.
-        // System.out.println(vo.getUserId());
-        // System.out.println(vo.getSeq());
-        // System.out.println(vo.getTitle());
-        // System.out.println(vo.getContent());
+        System.out.println(vo.getUserId());
+        System.out.println(vo.getSeq());
+        System.out.println(vo.getTitle());
+        System.out.println(vo.getContent());
 
         int updateCount = bbsDAO.updateBbsContent(vo);
         // 반드시 1이어야 한다.
@@ -83,13 +86,19 @@ public class BbsController {
         }
     }
 
-    @GetMapping("/bbs/newcontent")
+    @PostMapping("/bbs/newcontent")
     public String newcontent(@ModelAttribute("BbsTblVO") BbsTblVO vo,
-                          Model model) throws Exception {
-
-        BbsTblVO resultVO = bbsDAO.insertBbsContent(vo);
-        model.addAttribute("vo", resultVO);
-
+                             HttpServletRequest request,
+                             HttpServletResponse response) throws Exception {
+        System.out.println(vo.getUserId()); // 이제 출력될 것입니다.
+        System.out.println(vo.getSeq()); // 이제 출력될 것입니다.
+        System.out.println(vo.getTitle());
+        System.out.println(vo.getContent());
+        System.out.println(vo.getDivi());
+        System.out.println(vo.getRegdate()); // 이제 출력될 것입니다.
+        
+        // 필요한 로직 수행
+        
         return "bbs/newcontent";
     }
 
