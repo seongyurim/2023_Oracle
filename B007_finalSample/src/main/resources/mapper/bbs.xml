@@ -25,4 +25,19 @@
           RN <![CDATA[<=]]> (#{page} + 1) * #{rowsPerPage}
 </select>
 
+<select id="selectBbsContent" resultMap="bbsMap">
+    SELECT * FROM BBS_TBL WHERE USERID=#{userId} AND SEQ=#{seq}
+</select>
+
+<update id="updateBbsContent">
+    UPDATE BBS_TBL SET TITLE=#{title}, CONTENT=#{content}
+    WHERE USERID=#{userId} AND SEQ=#{seq}
+</update>
+
+<insert id="insertBbsContent">
+    INSERT INTO BBS_TBL(USERID, SEQ, TITLE, CONTENT, REGDATE, DIVI)
+    VALUES(#{userId}, (SELECT MAX(SEQ)+1 FROM BBS_TBL WHERE USERID=#{userId}),
+           #{title}, #{content}, sysdate, ${divi})
+</insert>
+
 </mapper>

@@ -53,7 +53,6 @@
 
         btnIndex.addEventListener('click', ()=>{
             location.href = '/index';
-
         });
 
         btnJoin.addEventListener('click', ()=>{
@@ -69,9 +68,7 @@
         btnFindPw.addEventListener('click', ()=>{
             // location.href = '/index';
             console.log("비밀번호찾기");
-        });
-
-        
+        });        
     })();
     </script>
 </body>

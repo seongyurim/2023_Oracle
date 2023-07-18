@@ -15,7 +15,24 @@ public class BbsDAO {
         return sqlSessionTemplate.selectOne("selectBbsRowCount");
     }
 
+    // 게시판 전체 목록 조회하기
     public List<BbsTblVO> selectBbsList(BbsTblVO vo) throws Exception {
         return sqlSessionTemplate.selectList("selectBbsList", vo);
+    }
+
+    // 내가 클릭한 게시물 페이지 나타내기
+    public BbsTblVO selectBbsContent(BbsTblVO vo) throws Exception {
+        return sqlSessionTemplate.selectOne("selectBbsContent", vo);
+    }
+
+    // 게시물 수정하기
+    // 개수를 리턴하므로 int여야 한다.
+    public int updateBbsContent(BbsTblVO vo) throws Exception {
+        return sqlSessionTemplate.update("updateBbsContent", vo);
+    }
+
+    // 게시물 등록하기
+    public BbsTblVO insertBbsContent(BbsTblVO vo) throws Exception {
+        return sqlSessionTemplate.selectOne("insertBbsContent", vo);
     }
 }

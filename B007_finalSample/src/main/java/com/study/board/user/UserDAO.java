@@ -12,8 +12,5 @@ public class UserDAO {
 
     public UserTblVO selectOneUser(UserTblVO vo) throws Exception {
         return sqlSessionTemplete.selectOne("selectOneUser", vo);
-        // SQL: select(selectOne - 한줄을 가져온다.
-        //             selectList - 여러줄을 가져온다.),
-        //      insert, update, delete
     }
 }
