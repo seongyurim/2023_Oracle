@@ -3,7 +3,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title></title>
+<title>Join</title>
+<style>
+    table input {
+        width: 280px;
+        height: 25px;
+        margin: 8px;
+    }
+</style>
 </head>
 <body>
     <h1>Join</h1>
@@ -12,29 +19,38 @@
     <table>
         <tr> </label>
             <td><label for="txtUserId">아이디</label></td>
-            <td><input type="text" id="txtUserId" name="userId"> <button type="button" id="btnCheckId">중복확인</button></td>
+            <td>
+                <input type="text" id="txtUserId" name="userId" placeholder="아이디 입력 (영소문자, 숫자 포함 6~12자)">
+                <button type="button" id="btnCheckId">중복확인</button>
+            </td>
         </tr>
         <tr>
             <td><label for="txtUserPw">비밀번호</label></td>            
-            <td><input type="password" id="txtUserPw" name="userPw"> <span id="isPwCorrect"></span></td>            
+            <td>
+                <input type="password" id="txtUserPw" name="userPw" placeholder="비밀번호 입력 (6~20자)"> 
+                <span id="isPwCorrect"></span>
+            </td>            
         </tr>
         <tr>
             <td><label for="txtCheckPw">비밀번호 확인</label></td>
-            <td><input type="password" id="txtCheckPw"> <span id="isPwSame"></span></td>
+            <td>
+                <input type="password" id="txtCheckPw" placeholder="비밀번호 재입력"> 
+                <span id="isPwSame"></span>
+            </td>
         </tr>
 
         <tr>
             <td><label for="txtName">이름</label></td>
-            <td><input type="text" id="txtName" name="name"></td>
+            <td><input type="text" id="txtName" name="name" placeholder="이름 입력"></td>
         </tr>
         <tr>
             <td><label for="txtEmail">이메일</label></td>
-            <td><input type="eamil" id="txtEmail" name="email"></td>
+            <td><input type="eamil" id="txtEmail" name="email" placeholder="이메일 입력 (ex. id@domain.com)"></td>
         </tr>
 
     </table>
     <br>
-    <button type="button" id="btnJoin" style="width: 290px;">회원가입</button>
+    <button type="button" id="btnJoin" style="width: 407px;">회원가입</button>
 
 <script src="/JS/jquery-3.7.0.min.js"></script>
 
@@ -42,17 +58,18 @@
 (()=>{   
 
     const txtUserId   = document.querySelector('#txtUserId');   // 아이디 입력
-    const btnCheckId  = document.querySelector('#btnCheckId');  // 아이디 중복확인 버튼
     const txtUserPw   = document.querySelector('#txtUserPw');   // 비밀번호 입력
-    const txtCheckPw  = document.querySelector('#txtCheckPw');  // 비밀번호 확인
-    const isPwCorrect = document.querySelector('#isPwCorrect'); // 비밀번호 글자수 확인 메세지
-    const isPwSame    = document.querySelector('#isPwSame');    // 비밀번호 일치여부 확인 메세지
     const txtName     = document.querySelector('#txtName');     // 이름 입력
     const txtEmail    = document.querySelector('#txtEmail');    // 이메일 입력
     const btnJoin     = document.querySelector('#btnJoin');     // 회원가입 버튼
 
+    const txtCheckPw  = document.querySelector('#txtCheckPw');  // 비밀번호 확인
+    const btnCheckId  = document.querySelector('#btnCheckId');  // 아이디 중복확인 버튼
+    const isPwCorrect = document.querySelector('#isPwCorrect'); // 비밀번호 글자수 확인 메세지
+    const isPwSame    = document.querySelector('#isPwSame');    // 비밀번호 일치여부 확인 메세지
+
     let idChecking = false; // 중복확인을 통과하면 true로 변경된다.
-    let checkedId = ''; // 중복확인이 된 아이디가 저장된다.
+    let checkedId = ''; // 중복확인이 통과된 아이디가 저장된다.
 
 
 
@@ -62,7 +79,7 @@
 
         // 1.아이디 중복여부 확인
         if ((idChecking == false) || (checkedId != txtUserId.value)) { 
-            alert('아이디 중복확인이 필요해요.');
+            alert('아이디 중복확인이 필요합니다.');
             txtUserId.value = '';
             txtUserId.focus();
             return false;
@@ -77,51 +94,58 @@
             return false;
         }
 
-        //
+        // 3. 비밀번호와 비밀번호 확인 값이 서로 같은지 확인
         if (txtUserPw.value != txtCheckPw.value) {
-            alert('비밀번호 입력 값이 서로 다릅니다.');
+            alert('입력된 비밀번호가 서로 다릅니다.');
             txtCheckPw.value = '';
             txtCheckPw.focus();
             return false;
         }
 
-        //
+        // 4. 이름을 입력했는지 확인
         if (txtName.value.length === 0) {
             alert('이름을 입력해주세요.');
             txtName.focus();
             return false;
         }
 
-        //
-        if (txtEamil.value.length === 0) {
+        // 5. 이메일을 입력했는지 확인
+        if (txtEmail.value.length === 0) {
             alert('이메일을 입력해주세요.');
-            txtEamil.focus();
+            txtEmail.focus();
             return false;
         }
 
+        // 6. 이메일의 정규표현식 검증
+        let regex = new RegExp(/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/);
+        let testResult = regex.test(txtEmail.value);
+        if (testResult === false) {
+            // console.log("REGEX FOR EMAIL = " + testResult);
+            alert('올바른 이메일 형태를 입력해주세요.');
+            txtEmail.focus();
+            return false;
+        }
+
+        // 7. 위의 검사를 모두 통과했으면 true
         return true;
     }
 
-
-
-
-    // 비밀번호의 글자수와 일치여부를 확인한다.
+    // 비밀번호의 글자수와 일치여부 확인
     const checkPw = function() {
         // 비밀번호 글자수 확인
         if (txtUserPw.value != '') {
             if ((txtUserPw.value.length < 6) || (txtUserId.value.length > 16)) {
-                isPwCorrect.innerHTML = '비밀번호는 6글자 이상, 16글자 이하만 가능합니다.';
+                isPwCorrect.innerHTML = '비밀번호는 6~16자만 가능합니다.';
                 isPwCorrect.style.color = 'red';
             }
             else {
-                isPwCorrect.innerHTML = '알맞은 비밀번호입니다.';
+                isPwCorrect.innerHTML = '사용 가능한 비밀번호입니다.';
                 isPwCorrect.style.color = 'green';
         
                 // 비밀번호 일치여부 확인
                 if ((txtUserPw.value != '') && (txtCheckPw.value != '')) {
                     isPwCorrect.innerHTML = '';
-                    if (txtUserPw.value == txtCheckPw.value) {
-        
+                    if (txtUserPw.value == txtCheckPw.value) {        
                         isPwSame.innerHTML = '비밀번호가 일치합니다.';
                         isPwSame.style.color = 'green';
                     }
@@ -137,37 +161,51 @@
         }
     }
 
-    // 이메일을 정규표현식으로 검증한다.
-    const checkEmail = function() {
-        if (txtEmail.value !== '') {
-           // let regex = new RegExp('[a-z0-9]+@[a-z]+\.edu\.[a-z]{2,3}');
-          //  let testResult = regex.test(txtEmail.value);
-            console.log(testResult);
-        }
-    }
-
 
 
     ////// 이벤트 핸들러 ///////////////////////////////////////////////////////////
 
-    // 아이디 중복확인
+    // 아이디 검증: 빈 값, 범위 외의 값, 중복 값
     btnCheckId.addEventListener('click', ()=>{
 
-        // 1. 아이디를 가지고 온다.
-        let id = txtUserId.value;
+        // 1. 값이 비어 있는 경우
+        if (txtUserId.value.length === 0) {
+            alert('아이디를 입력해주세요.');
+            idChecking = false;
+            txtUserId.focus();
+            return;
+        }
 
-        // 2. 아이디를 서버에 전송한다.
+        // 2. 값이 범위를 넘는 경우
+        if ((txtUserId.value.length < 6) || (txtUserId.value.length > 12)) {
+            alert('아이디 길이는 6~12자만 가능합니다.');
+            idChecking = false;
+            txtUserId.focus();
+            return;
+        }
+
+        // 3. 허용되지 않은 값이 있는 경우: 특수문자, 영대문자, 공백
+        let regex = new RegExp(/^[a-z0-9]+$/);
+        let testResult = regex.test(txtUserId.value);
+        if (testResult == false) {
+            alert('아이디는 영소문자와 숫자만 사용할 수 있습니다.');
+            idChecking = false;
+            txtUserId.focus();
+            return;
+        }
+
+        // 4. 아이디를 서버에 전송한다.
         let requestData = {
             userId : txtUserId.value
         }
+        console.log(requestData);
 
         $.ajax({
             url : '/checkId',
             type : 'POST',
             data : requestData,
             success : function(data) {
-
-                // 3. 결과를 받는다.
+                // 5. 결과를 받는다.
                 if (data === "OK") {
                     alert('사용 가능한 아이디입니다.');
                     checkedId = txtUserId.value;
@@ -179,7 +217,7 @@
                     idChecking = false;
                     txtUserId.value = '';
                     txtUserId.focus();
-                }
+                }   
             }
         });        
     });
@@ -188,36 +226,12 @@
     btnJoin.addEventListener('click', ()=>{
 
         // 데이터를 검사한다.
-        if (false === checkJoinData) {
+        if (false === checkJoinData()) {
+            // alert('error');
             return;
         }
 
-        // 내 코드
-        // // 1. 중복아이디 체크여부 확인
-        // if (idChecking === false) {
-        //     alert('아이디 중복확인을 해주세요.');
-        //     return;
-        // }
-
-        // // 2. 비밀번호 일치여부 확인
-        // checkPw();
-        
-        // // 3. 아이디~이메일까지 공백이 있는지 확인
-        // if ((txtUserId.value == '') ||
-        //     (txtCheckPw.value == '') ||
-        //     (txtName.value == '') ||
-        //     (txtEmail.value == '')) {
-        //         alert('비어있는 양식을 마저 입력해주세요.');
-        //         return;
-        // }
-        // // 4. 중복확인을 했던 아이디와 회원가입 버튼 클릭 시의 아이디가 동일한지 다시 확인
-        // if (txtUserId.value != checkedId) {
-        //     alert('아이디 중복확인이 다시 필요합니다.');
-        //     txtUserId.focus();
-        //     return;
-        // }
-
-        // 가입을 위한 요청 데이터를 만든다.
+        // 가입을 위한 요청 데이터
         let requestData = {
             userId : txtUserId.value, 
             userPw : txtUserPw.value,
@@ -247,10 +261,11 @@
     txtCheckPw.addEventListener('input', checkPw);
 
 
+
     ////// 출력부 //////////////////////////////////////////////////////////////////
 
-    checkEmail();
-
+    // checkEmail();
+    checkId();
         
 })(); 
 </script>
