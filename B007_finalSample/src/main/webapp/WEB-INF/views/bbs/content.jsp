@@ -6,6 +6,9 @@
 <title>Content</title>
 </head>
 <body>
+    <h1>UPDATE</h1>
+    <hr>
+
     <p><input type="text" id="txtTitle" value="${vo.title}"><span id="txtId"> ${vo.userId}</span></p>
     <p><textarea id="txtContent" cols="30" rows="10">${vo.content}</textarea></p>    
     <button type="button" id="btnList">목록으로</button>
@@ -45,9 +48,9 @@
             // 내 컨텐츠가 아니라면 읽기만 가능하다.
             if (myContent == false) {
                 // 타이틀과 컨텐츠를 Read Only + 수정버튼을 diabled
-                txtTitle.setAttribute('readonly', 'true');
-                txtContent.setAttribute('readonly', 'true');
-                btnUpdate.setAttribute('disabled', 'true');
+                txtTitle.setAttribute('readonly', 'readonly');
+                txtContent.setAttribute('readonly', 'readonly');
+                btnUpdate.setAttribute('disabled', 'disabled');
             }
             // 내 컨텐츠가 맞다면 읽기/쓰기가 모두 가능하다.
             else {
@@ -68,7 +71,7 @@
 
         // 수정하기 버튼
         btnUpdate.addEventListener('click', ()=>{
-            // 던질 데이터를 마련한다. (id, seq, title, content)
+            // DB로 전송할 데이터: id, seq, title, content
             let requestData = {
                 userId : '${vo.userId}',
                 seq : '${vo.seq}',
@@ -79,7 +82,7 @@
 
             $.ajax({
                 url : '/bbs/content',
-                type : 'post',
+                type : 'POST',
                 data : requestData,
                 success : function(data) {
                     if (data == "OK") {

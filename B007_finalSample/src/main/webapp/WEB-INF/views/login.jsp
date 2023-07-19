@@ -42,8 +42,15 @@
         const btnJoin   = document.querySelector('#btnJoin');
         const btnFindId = document.querySelector('#btnFindId');
         const btnFindPw = document.querySelector('#btnFindPw');
+        const userId    = document.querySelector('#userId');
+        const userPw    = document.querySelector('#userPw');
         
         btnLogin.addEventListener('click', ()=>{
+
+            if ((userId.value == "") || (userPw.value == "")) {
+                alert('아이디 혹은 비밀번호가 입력되지 않았어요.');
+            }
+
             // form DOM을 가지고 온다.
             const frmLogin = document.querySelector('#frmLogin');
 
@@ -56,8 +63,7 @@
         });
 
         btnJoin.addEventListener('click', ()=>{
-            // location.href = '/index';
-            console.log("회원가입");
+            location.href = '/join';
         });
 
         btnFindId.addEventListener('click', ()=>{

@@ -37,7 +37,7 @@
 <insert id="insertBbsContent">
     INSERT INTO BBS_TBL (USERID, SEQ, TITLE, CONTENT, DIVI, REGDATE)
     VALUES (#{userId}, (SELECT MAX(SEQ)+1 FROM BBS_TBL WHERE USERID=#{userId}),
-           #{title}, #{content}, ${divi}, sysdate)
+            #{title}, #{content}, #{divi}, sysdate)
 </insert>
 
 </mapper>

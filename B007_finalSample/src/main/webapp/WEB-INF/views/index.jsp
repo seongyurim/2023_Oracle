@@ -112,7 +112,7 @@
             // 오브젝트를 DB로 전달하기
             $.ajax({
                 url : 'bbs/list',
-                type : 'post',
+                type : 'POST',
                 data : requestData,
                 success : function(data) { // 여기서 받는 데이터: rowCount, bbsList
                     
@@ -272,7 +272,7 @@
 
             // 비로그인 상태
             if (sessionState === false) {
-                alert('로그인이 필요합니다.');
+                alert('로그인이 필요해요.');
                 return;
             }
             // 로그인 상태

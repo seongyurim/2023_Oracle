@@ -2,9 +2,6 @@ package com.study.board.bbs;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,14 +48,17 @@ public class BbsController {
                           Model model) throws Exception {
         // vo로 userId, seq 값을 받았다.
 
+        // 게시물 정보(userId, seq)에 맞는 게시물을 가지고 온다.
         // SELECT * FROM BBS_TBL WHERE USERID='jsh' AND QEQ=1
         BbsTblVO resultVO = bbsDAO.selectBbsContent(vo);
 
+        // 세션 정보를 가지고 온다.
         // 게시글 작성자와 사용자가 동일하다면 게시글을 수정할 수 있어야 한다.
-        // 따라서 로그인 된 회원 세션이 필요하다.
+        // 따라서 로그인된 회원 세션이 필요하다.
         UserTblVO userTblVO = (UserTblVO)SessionUtil.getAttribute("USER");
 
-        // 모델에 담는다.
+        // 게시물 정보와 세션 정보를 모델에 저장한다.
+        // 즉 content.jsp에서 이 두 정보를 모두 이용한다. (myContent?!)
         model.addAttribute("vo", resultVO);    // content row 정보 보내기
         model.addAttribute("session", userTblVO); // 로그인한 유저의 정보 보내기
 
@@ -86,21 +86,29 @@ public class BbsController {
         }
     }
 
-    @PostMapping("/bbs/newcontent")
+    @GetMapping("/bbs/newcontent")
     public String newcontent(@ModelAttribute("BbsTblVO") BbsTblVO vo,
-                             HttpServletRequest request,
-                             HttpServletResponse response) throws Exception {
-        System.out.println(vo.getUserId()); // 이제 출력될 것입니다.
-        System.out.println(vo.getSeq()); // 이제 출력될 것입니다.
+                             Model model) throws Exception {
+        UserTblVO userTblVO = (UserTblVO)SessionUtil.getAttribute("USER");
+        model.addAttribute("session", userTblVO);
+        return "/bbs/newcontent";
+    }
+
+    @PostMapping("/bbs/newcontent")
+    @ResponseBody // userId, title, content, divi
+    public String newcontent(@ModelAttribute("BbsTblVO") BbsTblVO vo) throws Exception {
+        System.out.println(vo.getUserId());
         System.out.println(vo.getTitle());
         System.out.println(vo.getContent());
         System.out.println(vo.getDivi());
-        System.out.println(vo.getRegdate()); // 이제 출력될 것입니다.
-        
-        // 필요한 로직 수행
-        
-        return "bbs/newcontent";
+
+        int insertCount = bbsDAO.insertBbsContent(vo);
+
+        if (insertCount == 1) {
+            return "OK";
+        }
+        else {
+            return "FAIL";
+        }
     }
-
-
 }

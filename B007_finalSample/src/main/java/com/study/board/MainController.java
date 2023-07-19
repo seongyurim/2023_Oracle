@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.study.board.common.SessionUtil;
 import com.study.board.user.UserDAO;
@@ -69,4 +70,46 @@ public class MainController {
         SessionUtil.remove(request, "USER");
         response.sendRedirect("index"); // 세션이 비워진 채로 index()로 이동
     }
+
+    @GetMapping("/join")
+    public String join(@ModelAttribute("UserTblVO") UserTblVO vo,
+                       Model model) throws Exception {
+
+            return "join";
+    }
+
+    @PostMapping("/checkId")
+    @ResponseBody
+    public String checkId(@ModelAttribute("UserTblVO") UserTblVO vo) throws Exception {
+        
+        // System.out.println(vo.getUserId());
+
+        UserTblVO isIdJoinable = userDAO.selectOneUser(vo); // userId가 저장되어 있다.
+
+        if (isIdJoinable == null) {
+            return "OK";
+        }
+        else {
+            return "FAIL";
+        }
+    }
+
+    @PostMapping("/join")
+    @ResponseBody
+    public String join(@ModelAttribute("UserTblVO") UserTblVO vo) throws Exception {
+
+        System.out.println(vo.getUserId());
+        System.out.println(vo.getUserPw());
+        System.out.println(vo.getName());
+        System.out.println(vo.getEmail());
+
+        int insertCount = userDAO.insertOneUser(vo);
+
+        if (insertCount == 1) {
+            return "OK";
+        }
+        else {
+            return "FAIL";
+        }
+    }            
 }
