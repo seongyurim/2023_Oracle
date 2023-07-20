@@ -18,7 +18,7 @@ public class UserDAO {
     //     return sqlSessionTemplete.selectOne("selectOneUserById", vo);
     // }
 
-    public int insertOneUser(UserTblVO vo) throws Exception {
-        return sqlSessionTemplete.insert("insertOneUser", vo);
+    public int insertUser(UserTblVO vo) throws Exception {
+        return sqlSessionTemplete.insert("insertUser", vo);
     }
 }

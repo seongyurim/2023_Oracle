@@ -14,7 +14,10 @@
     <hr>
     <div>
         <p><span id="spnWelcome"></span></p>
-        <p><button type="button" id="btnLogin">로그인</button></p>        
+        <p>
+            <button type="button" id="btnLogin">로그인</button>
+            <button type="button" id="btnJoin">회원가입</button>
+        </p>        
     </div>
 
     <table border="1" id="tblBBS">
@@ -85,7 +88,7 @@
                 spnWelcome.textContent = '${vo.name}님 반갑습니다ヽ( ´ー`)ノ';
             }
             else {
-                spnWelcome.textContent = '로그인 해주세요.';
+                spnWelcome.textContent = '로그인이 필요한 서비스입니다.';
             }
         }
 
@@ -153,21 +156,46 @@
             return (curSection * pagesPerSection) + pageOffset;
         }
 
+        // 게시판 버튼 숫자를 업데이트하고 남는 버튼은 삭제한다.
+        const updateBtns = function() {
+            let startPage = curSection * pagesPerSection + 1;
+            for (let i = 0; i < pagesPerSection; i++) {
+                const btn = document.querySelector('#btn' + (i+1));
+                if (startPage <= Math.ceil(rowCount / rowsPerPage)) {
+                    btn.textContent = startPage++;
+                    btn.style.display = 'inline';
+                }
+                else {
+                    btn.style.display = 'none';
+                }
+            }
+        }
+
 
 
         ////// 이벤트 핸들러 ///////////////////////////////////////////////////////////
-        // 로그인 상태
+        
+        // 로그인 버튼
         btnLogin.addEventListener('click', ()=>{
             if (sessionState === true) { // 로그인한 상태라면
-                location.href = '/logout';
+                if (!confirm("정말 로그아웃 하시겠어요?")) {
+                    return;
+                }
+                else {
+                    alert('정상적으로 로그아웃 되었어요.');
+                    location.href = '/logout';
+                }
             }
             else { // 로그인한 상태가 아니라면
                 location.href = '/login';
             }
         });
 
+        btnJoin.addEventListener('click', ()=>{
+            location.href = '/join';
+        });
 
-        // Prev
+        // 이전 목록 버튼
         btnPrev.addEventListener('click', ()=> {
             
             if (curSection <= 0) {
@@ -175,17 +203,14 @@
                 return;
             }
 
-            // 서버에 현재 몇 건이 있는지 알아본다.
-            // 1건이 있다.
-            // 
-
             curSection--;
+            updateBtns();
             let realPage = getRealPage(0); // 이전 페이지의 0번으로 설정
             setBBS(realPage);
         });
         
 
-        // Next
+        // 다음 목록 버튼
         btnNext.addEventListener('click', ()=> {
             
             let rowsPerSection = rowsPerPage * pagesPerSection; // 25개            
@@ -197,11 +222,11 @@
             }
 
             curSection++;
+            updateBtns();
             let realPage = getRealPage(0); // 다음 페이지의 0번으로 설정
             setBBS(realPage);
             console.log("curSection = " + curSection);            
         });
-
 
         btn1.addEventListener('click', ()=> {
             // 1번 버튼을 눌렀을 때
@@ -243,31 +268,7 @@
             console.log("realPage = " + realPage);
         });
 
-        // btn1.addEventListener('click', ()=> {
-        //     // setBBS(0);
-        //     setBBS(curPage);
-        // });
-
-        // btn2.addEventListener('click', ()=> {
-        //     // setBBS(1);
-        //     setBBS(curPage + 1);
-        // });
-
-        // btn3.addEventListener('click', ()=> {
-        //     // setBBS(2);
-        //     setBBS(curPage + 2);
-        // });
-
-        // btn4.addEventListener('click', ()=> {
-        //     // setBBS(3);
-        //     setBBS(curPage + 3);
-        // });
-
-        // btn5.addEventListener('click', ()=> {
-        //     // setBBS(4);
-        //     setBBS(curPage + 4);
-        // });
-
+        // 글쓰기 버튼
         btnWrite.addEventListener('click', ()=>{
 
             // 비로그인 상태

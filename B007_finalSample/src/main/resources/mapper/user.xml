@@ -19,7 +19,7 @@
     AND USERPW=#{userPw}</if> <!-- 끝에 세미콜론 붙이지 않기! -->
 </select>
 
-<insert id="insertOneUser">
+<insert id="insertUser">
     INSERT INTO USER_TBL (USERID, USERPW, EMAIL, NAME)
     VALUES (#{userId}, #{userPw}, #{email}, #{name})
 </insert>

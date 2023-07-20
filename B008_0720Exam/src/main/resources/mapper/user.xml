@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- DAO 정보 -->
+<mapper namespace="com.study.test.common.UserDAO">
+
+<!-- resultMap = 얻어온 결과를 저장할 곳. 즉 VO 정보 -->
+<resultMap type="com.study.test.common.UserVO" id="userMap">
+    <result property="MEMBERID" column="MEMBERID"/>
+    <result property="MEMBERPW" column="MEMBERPW"/>
+    <result property="NAME"     column="NAME"/>
+    <result property="EMAIL"    column="EMAIL"/>
+    <result property="GRADE"    column="GRADE"/>
+</resultMap>
+
+<select id="selectOneUser" resultMap="userMap">
+    SELECT * FROM MEMBER_TBL
+    WHERE MEMBERID=#{MEMBERID}
+    <if test="MEMBERPW != null and MEMBERPW != ''">
+    AND MEMBERPW=#{MEMBERPW}</if>
+</select>
+
+<insert id="insertUser">
+    INSERT INTO MEMBER_TBL (MEMBERID, MEMBERPW, NAME, EMAIL, GRADE)
+    VALUES (#{MEMBERID}, #{MEMBERPW}, #{NAME}, #{EMAIL}, #{GRADE})
+</insert>
+
+</mapper>

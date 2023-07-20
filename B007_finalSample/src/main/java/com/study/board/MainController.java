@@ -103,7 +103,7 @@ public class MainController {
         System.out.println(vo.getName());
         System.out.println(vo.getEmail());
 
-        int insertCount = userDAO.insertOneUser(vo);
+        int insertCount = userDAO.insertUser(vo);
 
         if (insertCount == 1) {
             return "OK";

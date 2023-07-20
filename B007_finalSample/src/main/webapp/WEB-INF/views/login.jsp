@@ -55,7 +55,8 @@
             const frmLogin = document.querySelector('#frmLogin');
 
             // form DOM의 submit 함수를 호출한다.
-            frmLogin.submit(); // action="/login" method="post" 정보를 통해 작동
+            // action="/login" method="post" 정보를 통해 작동
+            frmLogin.submit(); 
         });
 
         btnIndex.addEventListener('click', ()=>{
