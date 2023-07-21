@@ -60,10 +60,11 @@
         let pagesPerSection = 5; // 섹션당 페이지 수(버튼 수와 동일)
 
         const spnWelcome = document.querySelector('#spnWelcome');
-        const btnLogin = document.querySelector('#btnLogin');
-        const btnPrev = document.querySelector('#btnPrev');
-        const btnNext = document.querySelector('#btnNext');
-        const btnWrite = document.querySelector('#btnWrite');
+        const btnLogin   = document.querySelector('#btnLogin');
+        const btnJoin    = document.querySelector('#btnJoin');
+        const btnPrev    = document.querySelector('#btnPrev');
+        const btnNext    = document.querySelector('#btnNext');
+        const btnWrite   = document.querySelector('#btnWrite');
         const btn1 = document.querySelector('#btn1');
         const btn2 = document.querySelector('#btn2');
         const btn3 = document.querySelector('#btn3');
@@ -99,6 +100,12 @@
             }
             else {
                 btnLogin.textContent = '로그인';
+            }
+        }
+
+        const setJoinButton = function() {
+            if (sessionState === true) {
+                btnJoin.style.display = 'none';
             }
         }
 
@@ -199,7 +206,7 @@
         btnPrev.addEventListener('click', ()=> {
             
             if (curSection <= 0) {
-                alert("이전 페이지가 없습니다.");
+                alert("첫 페이지입니다.");
                 return;
             }
 
@@ -217,7 +224,7 @@
             let nextRowCount = rowCount - rowsPerSection * (curSection + 1);
             
             if (nextRowCount <= 0) {
-                alert("다음 페이지가 없습니다.");
+                alert("마지막 페이지입니다.");
                 return;
             }
 
@@ -289,6 +296,7 @@
         setSessionState(); // 세션이 있는지 없는지 상태값을 저장한다.
         setWelcomeMsg();   // 로그인한 사용자에게 웰컴 메세지를 설정한다.
         setLoginButton();  // 로그인 여부에 따라 버튼을 로그인/로그오프로 설정한다.
+        setJoinButton();   // 로그인이 되었다면 회원가입 버튼을 숨긴다.
 
         // curPage = 0;
         setBBS(0);

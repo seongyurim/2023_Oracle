@@ -68,13 +68,12 @@
         });
 
         btnFindId.addEventListener('click', ()=>{
-            // location.href = '/index';
-            console.log("아이디찾기");
+            location.href = '/idinquiry';
         });
 
         btnFindPw.addEventListener('click', ()=>{
-            // location.href = '/index';
-            console.log("비밀번호찾기");
+            location.href = '/pwinquiry';
+
         });        
     })();
     </script>

@@ -21,4 +21,12 @@ public class UserDAO {
     public int insertUser(UserTblVO vo) throws Exception {
         return sqlSessionTemplete.insert("insertUser", vo);
     }
+
+    public UserTblVO selectOneUserByEmail(UserTblVO vo) throws Exception {
+        return sqlSessionTemplete.selectOne("selectOneUserByEmail", vo);
+    }
+
+    public UserTblVO selectOneUserByUserId(UserTblVO vo) throws Exception {
+        return sqlSessionTemplete.selectOne("selectOneUserByUserId", vo);
+    }
 }

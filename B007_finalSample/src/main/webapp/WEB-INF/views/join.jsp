@@ -36,6 +36,7 @@
                 <button type="button" id="btnCheckId">중복확인</button>
             </td>
         </tr>
+
         <tr>
             <td><label for="txtUserPw">비밀번호</label></td>            
             <td>
@@ -43,6 +44,7 @@
                 <span id="isPwCorrect"></span>
             </td>            
         </tr>
+
         <tr>
             <td><label for="txtCheckPw">비밀번호 확인</label></td>
             <td>
@@ -57,9 +59,28 @@
         </tr>
         <tr>
             <td><label for="txtEmail">이메일</label></td>
-            <td><input type="eamil" id="txtEmail" name="email" placeholder="이메일 입력 (ex. id@domain.com)"></td>
+            <td><input type="email" id="txtEmail" name="email" placeholder="이메일 입력 (ex. id@domain.com)"></td>
         </tr>
 
+        <tr>
+            <td><label for="kakaoZip">주소</label></td>
+            <td>
+                <input type="text" id="kakaoZip" placeholder="우편번호">
+                <button type="button" id="kakaoFindZipBtn">우편번호 찾기</button>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="text" id="kakaoAddress" name="address" placeholder="주소"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="text" id="kakaoDetailAddress" placeholder="상세주소"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="text" id="kakaoExtraAddress" placeholder="참고항목"></td>
+        </tr>
     </table>
     <p>
         <button type="button" id="btnJoin" class="btns">회원가입</button>
@@ -67,6 +88,7 @@
     </p>
 
     <script src="/JS/jquery-3.7.0.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
     <script>
     (()=>{   
@@ -80,12 +102,21 @@
         const btnCheckId  = document.querySelector('#btnCheckId');  // 아이디 중복확인 버튼
         const isPwCorrect = document.querySelector('#isPwCorrect'); // 비밀번호 글자수 확인 메세지
         const isPwSame    = document.querySelector('#isPwSame');    // 비밀번호 일치여부 확인 메세지
-
+        
         const btnJoin     = document.querySelector('#btnJoin');     // 회원가입 버튼
-        const btnIndex     = document.querySelector('#btnIndex');   // 메인으로 버튼
-
+        const btnIndex    = document.querySelector('#btnIndex');   // 메인으로 버튼
+        
+        // 카카오 주소 API 관련
+        const kakaoZip           = document.querySelector('#kakaoZip');           // 우편번호
+        const kakaoAddress       = document.querySelector('#kakaoAddress');       // 주소
+        const kakaoDetailAddress = document.querySelector('#kakaoDetailAddress'); // 상세주소
+        const kakaoExtraAddress  = document.querySelector('#kakaoExtraAddress');  // 참고항목
+        const kakaoFindZipBtn    = document.querySelector('#kakaoFindZipBtn');    // 우편번호 찾기 버튼
+        let finalAddress = ''; // 카카오에서 가져온 주소 문자열을 한 필드에 최종저장
+        
         let idChecking = false; // 중복확인을 통과하면 true로 변경된다.
         let checkedId = ''; // 중복확인이 통과된 아이디가 저장된다.
+
 
 
 
@@ -188,6 +219,58 @@
             }
         }
 
+        // 카카오 주소 API
+        const getFinalAddress = function() {
+            new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                let addr = ''; // 주소 변수
+                let extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                if(data.userSelectedType === 'R') {
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if(data.buildingName !== '' && data.apartment === 'Y'){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if(extraAddr !== ''){
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                    // (추가) 조합된 참고항목을 해당 필드에 넣는다.
+                    kakaoExtraAddress.value = extraAddr;                
+                } else {
+                    kakaoExtraAddress.value = '';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                kakaoZip.value = data.zonecode;
+                kakaoAddress.value = addr;
+
+                // (custom) 모든 주소를 한 필드에 넣는다.
+                finalAddress = kakaoZip.value + " " + kakaoAddress.value + " " + kakaoDetailAddress.value;
+
+                // 커서를 상세주소 필드로 이동한다.
+                kakaoDetailAddress.focus();
+                }
+            }).open();
+        }
+
         // 회원가입 실패 시 입력된 값 리셋
         const resetPage = function() {
             txtUserId = '';
@@ -276,7 +359,8 @@
                 userId : txtUserId.value, 
                 userPw : txtUserPw.value,
                 name : txtName.value,
-                email : txtEmail.value
+                email : txtEmail.value,
+                address : finalAddress
             };
             console.log(requestData); // 꼭 확인해보자.
 
@@ -297,21 +381,20 @@
             });
         });
 
+        // 비밀번호의 유효성을 클라이언트가 직접 확인할 수 있도록 메세징
         txtUserPw.addEventListener('input', checkPw);
         txtCheckPw.addEventListener('input', checkPw);
+        
+        // 카카오 우편번호 찾기 버튼
+        kakaoFindZipBtn.addEventListener('click', ()=>{
+            getFinalAddress();
+        });
 
+        // 메인으로 돌아가는 버튼
         btnIndex.addEventListener('click', ()=>{
             location.href = '/index';
         });
-
-
-
-        ////// 출력부 //////////////////////////////////////////////////////////////////
-
-        // checkEmail();
-        checkId();
             
     })(); 
-    </script>
-        
+    </script>        
 </body>

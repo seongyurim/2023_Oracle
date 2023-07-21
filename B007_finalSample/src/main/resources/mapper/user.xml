@@ -10,6 +10,7 @@
     <result property="userPw"    column="USERPW"/>
     <result property="email"     column="EMAIL"/>
     <result property="name"      column="NAME"/>
+    <result property="address"   column="ADDRESS"/>
 </resultMap>
 
 <select id="selectOneUser" resultMap="userMap">
@@ -20,8 +21,19 @@
 </select>
 
 <insert id="insertUser">
-    INSERT INTO USER_TBL (USERID, USERPW, EMAIL, NAME)
-    VALUES (#{userId}, #{userPw}, #{email}, #{name})
+    INSERT INTO USER_TBL (USERID, USERPW, EMAIL, NAME, ADDRESS)
+    VALUES (#{userId}, #{userPw}, #{email}, #{name}, #{address})
 </insert>
+
+<!-- 이메일을 입력해서 아이디 찾기 -->
+<!-- 이메일은 후보키이기 때문에 단 하나의 튜플만 반환될 것이다. -->
+<select id="selectOneUserByEmail" resultMap="userMap">
+    SELECT * FROM USER_TBL WHERE EMAIL=#{email}
+</select>
+
+<!-- 아이디를 입력해서 비밀번호 찾기 -->
+<select id="selectOneUserByUserId" resultMap="userMap">
+    SELECT * FROM USER_TBL WHERE USERID=#{userId}
+</select>
 
 </mapper>

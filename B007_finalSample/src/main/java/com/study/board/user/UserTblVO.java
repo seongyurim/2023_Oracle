@@ -9,4 +9,5 @@ public class UserTblVO {
     private String userPw;
     private String email;
     private String name;
+    private String address;
 }

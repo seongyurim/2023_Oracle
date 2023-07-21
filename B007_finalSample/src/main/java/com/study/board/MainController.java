@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.study.board.common.GmailSender;
 import com.study.board.common.SessionUtil;
 import com.study.board.user.UserDAO;
 import com.study.board.user.UserTblVO;
@@ -111,5 +112,81 @@ public class MainController {
         else {
             return "FAIL";
         }
-    }            
+    }
+    
+    @GetMapping("/idinquiry")
+    public String idinquiry() {
+        return "idinquiry";
+    }
+
+    // @PostMapping("/idinquiry")
+    // @ResponseBody
+    // public UserTblVO idinquiry(@ModelAttribute("UserTblVO") UserTblVO vo) throws Exception {
+
+    //     UserTblVO resultVO = userDAO.selectOneUserEmail(vo); // VO가 이메일을 가져왔다.
+    //     System.out.println(resultVO);        
+    //     return resultVO;
+    // }
+
+    @PostMapping("/idinquiry")
+    @ResponseBody
+    public String idinquiry(@ModelAttribute("UserTblVO") UserTblVO vo) throws Exception {
+
+        UserTblVO resultVO = userDAO.selectOneUserByEmail(vo); // VO가 이메일을 가져왔다.
+        System.out.println(resultVO);
+
+        if (resultVO != null) {
+            // resultVO에 있는 userId를 변수에 저장
+            String userId = resultVO.getUserId();
+    
+            // userId의 끝 세자리를 마스킹해서 변수에 저장
+            String maskedUserId = userId.substring(0, userId.length() - 3) + "***";
+            System.out.println(maskedUserId);        
+
+            // 이건 강사님 코드
+            // String id = "";
+            // int len = 0;
+            // len = resultVO.getUserId().length();
+            // id = resultVO.getUserId().substring(0, len - 2);
+            // id += "**";
+            // return id;
+    
+            return maskedUserId;
+        }
+        else {
+            return "$FAIL"; // 아이디가 fail인 유저가 있을 수 있으므로 특수문자를 추가한 것
+        }
+    }    
+
+    @GetMapping("/pwinquiry")
+    public String pwinquiry() {
+        return "pwinquiry";
+    }
+
+    @PostMapping("/pwinquiry")
+    @ResponseBody
+    public String pwinquiry(@ModelAttribute("UserTblVO") UserTblVO vo) throws Exception {
+
+        UserTblVO resultVO = userDAO.selectOneUserByUserId(vo); // VO가 아이디를 가져왔다.
+        System.out.println(resultVO);
+
+        String senderName = "miruyseong@gmail.com"; // 관리자의 이메일을 세팅
+        String senderPasswd = "hkfugthkufcydqlu";   // 구글 계정의 앱 비밀번호 16자
+        GmailSender gmailSender = null;
+        
+        if (resultVO == null) {
+            return "$FAIL";
+        }
+        else {
+            // 비밀번호를 메일로 전송한다.
+            gmailSender = new GmailSender(senderName, senderPasswd);
+            gmailSender.sendEmail(resultVO.getEmail(), "비밀번호 전송", "비밀번호: " + resultVO.getUserPw());
+            // sendEmail의 파라미터(3개)
+            // param 1. 받을 사람의 이메일 주소
+            // param 2. 이메일의 제목
+            // param 3. 이메일의 내용
+
+            return "$OK";
+        }
+    }
 }

@@ -70,6 +70,14 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>
+
+		<!-- Gmail 사용을 위해 추가된 의존성 라이브러리(javax) -->
+		<!-- 비밀번호를 이메일로 전송하기 위해 사용하는 GmailSender때문에 필요한 것 -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

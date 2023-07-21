@@ -34,9 +34,16 @@
     WHERE USERID=#{userId} AND SEQ=#{seq}
 </update>
 
-<insert id="insertBbsContent">
+<!-- <insert id="insertBbsContent">
     INSERT INTO BBS_TBL (USERID, SEQ, TITLE, CONTENT, DIVI, REGDATE)
     VALUES (#{userId}, (SELECT MAX(SEQ)+1 FROM BBS_TBL WHERE USERID=#{userId}),
+            #{title}, #{content}, #{divi}, sysdate)
+</insert> -->
+
+<!-- SEQ 속성에 NVL 함수를 사용하여 NULL이 뜨는 경우 0으로 치환 -->
+<insert id="insertBbsContent">
+    INSERT INTO BBS_TBL (USERID, SEQ, TITLE, CONTENT, DIVI, REGDATE)
+    VALUES (#{userId}, NVL((SELECT MAX(SEQ)+1 FROM BBS_TBL WHERE USERID=#{userId}), 0),
             #{title}, #{content}, #{divi}, sysdate)
 </insert>
 
