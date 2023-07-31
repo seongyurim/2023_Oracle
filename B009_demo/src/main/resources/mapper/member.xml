@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uuidtest.demo.member.MemberDAO">
+
+<insert id="insertMemberTbl">
+    INSERT INTO MEMBER_TBL (member_id, member_pw, name, email
+    <if test="fileCode!=null and fileCode!=''">
+    , file_code
+    </if>
+    )
+    VALUES (#{memberId}, #{memberPw}, #{name}, #{email}
+    <if test="fileCode!=null and fileCode!=''">
+    , #{fileCode}
+    </if>
+    )
+</insert>
+
+</mapper>

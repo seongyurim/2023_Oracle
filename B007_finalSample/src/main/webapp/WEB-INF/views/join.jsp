@@ -88,7 +88,7 @@
     </p>
 
     <script src="/JS/jquery-3.7.0.min.js"></script>
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
     <script>
     (()=>{   
@@ -104,7 +104,7 @@
         const isPwSame    = document.querySelector('#isPwSame');    // 비밀번호 일치여부 확인 메세지
         
         const btnJoin     = document.querySelector('#btnJoin');     // 회원가입 버튼
-        const btnIndex    = document.querySelector('#btnIndex');   // 메인으로 버튼
+        const btnIndex    = document.querySelector('#btnIndex');    // 메인으로 버튼
         
         // 카카오 주소 API 관련
         const kakaoZip           = document.querySelector('#kakaoZip');           // 우편번호
@@ -115,7 +115,7 @@
         let finalAddress = ''; // 카카오에서 가져온 주소 문자열을 한 필드에 최종저장
         
         let idChecking = false; // 중복확인을 통과하면 true로 변경된다.
-        let checkedId = ''; // 중복확인이 통과된 아이디가 저장된다.
+        let checkedId  = '';    // 중복확인이 통과된 아이디가 저장된다.
 
 
 
@@ -223,7 +223,7 @@
         const getFinalAddress = function() {
             new daum.Postcode({
             oncomplete: function(data) {
-                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+                // 팝업에서 검색결과 항목을 클릭했을 때 실행할 코드를 작성하는 부분.
 
                 // 각 주소의 노출 규칙에 따라 주소를 조합한다.
                 // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
@@ -317,32 +317,65 @@
                 return;
             }
 
-            // 4. 아이디를 서버에 전송한다.
+            // 4. 
             let requestData = {
                 userId : txtUserId.value
             }
-            console.log(requestData);
+            // console.log(requestData);
 
-            $.ajax({
-                url : '/checkId',
-                type : 'POST',
-                data : requestData,
-                success : function(data) {
-                    // 5. 결과를 받는다.
-                    if (data === "OK") {
-                        alert('사용 가능한 아이디입니다.');
-                        checkedId = txtUserId.value;
-                        idChecking = true;
-                        txtUserPw.focus();
+            //
+            let xhr = new XMLHttpRequest(); // 서버와 통신을 수행하는 객체
+            xhr.open('POST', '/checkId', true);
+            xhr.setRequestHeader('Content-Type', 'application/json'); // 컨텐트타입을 json으로 설정
+
+            xhr.onreadystatechange = function() {
+                // 서버와 통신하는 객체의 상태가 변하였다. (즉 서버에서 새로운 데이터가 왔다는 의미)
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        let data = xhr.responseText;
+                        if (data == 'FAIL') {
+                            alert('이미 존재하는 아이디입니다.');
+                            idChecking = false;
+                            txtUserId.value = '';
+                            txtUserId.focus();
+                        }
+                        else {
+                            alert('사용 가능한 아이디입니다.');
+                            idChecking = true;
+                            checkedId = txtUserId.value;
+                            txtUserPw.focus();
+                        }
                     }
                     else {
-                        alert('이미 존재하는 아이디입니다.');
-                        idChecking = false;
-                        txtUserId.value = '';
-                        txtUserId.focus();
-                    }   
+                        console.error('Request failed with status: ', xhr.status);
+                    }
                 }
-            });        
+            };
+
+            let dat = JSON.stringify(requestData);
+            console.log(dat);
+            xhr.send(dat);
+
+            // $.ajax({
+            //     url : '/checkId',
+            //     type : 'POST',
+            //     data : requestData,
+            //     success : function(data) {
+            //         // 5. 결과를 받는다.
+            //         if (data === "OK") {
+            //             alert('사용 가능한 아이디입니다.');
+            //             checkedId = txtUserId.value;
+            //             idChecking = true;
+            //             txtUserPw.focus();
+            //         }
+            //         else {
+            //             alert('이미 존재하는 아이디입니다.');
+            //             idChecking = false;
+            //             txtUserId.value = '';
+            //             txtUserId.focus();
+            //         }   
+            //     }
+            // });        
         });
 
         // 회원가입 버튼

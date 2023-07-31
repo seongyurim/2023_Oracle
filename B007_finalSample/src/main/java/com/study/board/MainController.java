@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.study.board.common.GmailSender;
@@ -81,13 +82,13 @@ public class MainController {
 
     @PostMapping("/checkId")
     @ResponseBody
-    public String checkId(@ModelAttribute("UserTblVO") UserTblVO vo) throws Exception {
+    public String checkId(@RequestBody UserTblVO vo) throws Exception {
         
         // System.out.println(vo.getUserId());
 
-        UserTblVO isIdJoinable = userDAO.selectOneUser(vo); // userId가 저장되어 있다.
+        UserTblVO resultVO = userDAO.selectOneUser(vo); // userId가 저장되어 있다.
 
-        if (isIdJoinable == null) {
+        if (resultVO == null) {
             return "OK";
         }
         else {
@@ -188,5 +189,15 @@ public class MainController {
 
             return "$OK";
         }
+    }
+
+    @GetMapping("/bstest")
+    public String bstest() {
+        return "bstest";
+    }
+
+    @GetMapping("/maptest")
+    public String maptest() {
+        return "maptest";
     }
 }
