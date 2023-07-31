@@ -5,6 +5,11 @@
 <meta charset="UTF-8">
 <title>JOIN</title>
 <style>
+    h1 {
+        text-align: center;
+        margin-top: 100px;
+    }
+
     table {
         margin: 20px auto;
     }
@@ -20,7 +25,7 @@
 
     .btn {
         margin: 0 auto;
-        width: 370px;
+        width: 360px;
         height: 50px;
         display: block;
         margin-top: 20px;

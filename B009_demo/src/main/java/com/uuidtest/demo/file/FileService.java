@@ -14,11 +14,9 @@ public class FileService {
     public FileVO createFile(FileVO vo) throws Exception {
 
         UUID uuid;          // UUID
-        String orgFileName;
         String fileCode;    // 파일코드
         String fileExt;     // 파일확장자
-
-        // 1. 파일을 저장한다.
+        String orgFileName;
 
         if (false == vo.getMultiFile().getOriginalFilename().isEmpty()) {
             // 여기로 들어오면 파일이 존재한다는 의미
